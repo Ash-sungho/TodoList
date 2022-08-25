@@ -11,9 +11,11 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import {IconConstant} from '../../assets/Constant';
 
-interface AddTodo {}
+interface AddTodoProps {
+  onInsert: () => {};
+}
 
-const AddTodo = () => {
+const AddTodo = ({onInsert}) => {
   const [text, setText] = useState('');
 
   const button = (
@@ -24,6 +26,7 @@ const AddTodo = () => {
 
   const onPress = () => {
     setText('');
+    onInsert(text);
     Keyboard.dismiss();
   };
 
