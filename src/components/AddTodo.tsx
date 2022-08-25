@@ -12,10 +12,10 @@ import {TextInput} from 'react-native-gesture-handler';
 import {IconConstant} from '../../assets/Constant';
 
 interface AddTodoProps {
-  onInsert: () => {};
+  onInsert: (text: string) => {};
 }
 
-const AddTodo = ({onInsert}) => {
+const AddTodo = ({onInsert}: AddTodoProps) => {
   const [text, setText] = useState('');
 
   const button = (
