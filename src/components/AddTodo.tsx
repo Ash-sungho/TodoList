@@ -12,7 +12,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import {IconConstant} from '../../assets/Constant';
 
 interface AddTodoProps {
-  onInsert: (text: string) => {};
+  onInsert: (text: string) => void;
 }
 
 const AddTodo = ({onInsert}: AddTodoProps) => {

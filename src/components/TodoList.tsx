@@ -1,24 +1,12 @@
-import React, {useState} from 'react';
-import {
-  FlatList,
-  Image,
-  Keyboard,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableNativeFeedback,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import React from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {todoType} from '../../App.js';
-import {IconConstant} from '../../assets/Constant';
 import TodoItem from './TodoItem';
 
 interface todoProp {
   todos: todoType[];
-  onToggle: (id: number) => {};
-  onRemove: (id: number) => {};
+  onToggle: (id: number) => void;
+  onRemove: (id: number) => void;
 }
 
 const TodoList = ({todos, onToggle, onRemove}: todoProp) => {
@@ -27,18 +15,18 @@ const TodoList = ({todos, onToggle, onRemove}: todoProp) => {
       style={styles.list}
       data={todos}
       renderItem={({item}) => (
-        <TodoItem
-          id={item.id}
-          text={item.text}
-          done={item.done}
-          onToggle={onToggle}
-          onRemove={onRemove}
-        />
+        <View key={item.id}>
+          <TodoItem
+            id={item.id}
+            text={item.text}
+            done={item.done}
+            onToggle={onToggle}
+            onRemove={onRemove}
+          />
+        </View>
       )}
-      keyExtractor={item => {
-        item.id.toString();
-      }}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
+      keyExtractor={item => item.id.toString()}
     />
   );
 };

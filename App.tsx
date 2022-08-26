@@ -1,10 +1,11 @@
 import * as React from 'react';
-import {Alert, KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
+import {KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import AddTodo from './src/components/AddTodo';
 import Datehead from './src/components/Datehead';
 import Empty from './src/components/Empty';
 import TodoList from './src/components/TodoList';
+import {storages} from './src/components/util/storages';
 
 export type todoType = {
   id: number;
@@ -45,6 +46,23 @@ const App = () => {
     setTodos(nextTodos);
   };
 
+  // const test1 = async () => {
+  //   await storages.setItem('test', '11값넣은거 테스트', () => {
+  //     console.log('스토리지테스트 setItem 완료');
+  //   });
+  // };
+
+  // const test2 = async () => {
+  //   // const a = await storages.getItem('test', () => {
+  //   //
+  //   // });
+  //   // console.log('확인 :', a);
+  //   await storages.getItem('test').then(result => {
+  //     console.log('getItem ::', result);
+  //     console.log('스토리지테스트 getItem 완료');
+  //   });
+  // };
+
   return (
     <SafeAreaProvider>
       <SafeAreaView edges={['bottom']} style={styles.block}>
@@ -57,6 +75,18 @@ const App = () => {
           ) : (
             <TodoList todos={todos} onToggle={onToggle} onRemove={onRemove} />
           )}
+          {/* <Button
+          title="asyncStoragetest1"
+          onPress={() => {
+            test1();
+          }}
+        />
+        <Button
+          title="asyncStoragetest2"
+          onPress={() => {
+            test2();
+          }}
+        /> */}
           <AddTodo onInsert={onInsert} />
         </KeyboardAvoidingView>
       </SafeAreaView>

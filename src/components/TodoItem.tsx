@@ -15,8 +15,8 @@ interface ITodoItem {
   id: number;
   text: string;
   done: boolean;
-  onToggle: (id: number) => {};
-  onRemove: (id: number) => {};
+  onToggle: (id: number) => void;
+  onRemove: (id: number) => void;
 }
 
 const TodoItem = ({id, text, done, onToggle, onRemove}: ITodoItem) => {
