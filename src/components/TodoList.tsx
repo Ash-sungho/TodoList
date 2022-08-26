@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
-import {todoType} from '../../App';
+import {todoType} from '../../App.js';
 import {IconConstant} from '../../assets/Constant';
 import TodoItem from './TodoItem';
 
@@ -19,13 +19,18 @@ interface todoProp {
   todos: todoType[];
 }
 
-const TodoList = ({todos}: todoProp) => {
+const TodoList = ({todos, onToggle}: todoProp) => {
   return (
     <FlatList
       style={styles.list}
       data={todos}
       renderItem={({item}) => (
-        <TodoItem id={item.id} text={item.text} done={item.done} />
+        <TodoItem
+          id={item.id}
+          text={item.text}
+          done={item.done}
+          onToggle={onToggle}
+        />
       )}
       keyExtractor={item => {
         item.id.toString();

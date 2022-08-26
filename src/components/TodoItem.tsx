@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  Touchable,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {IconConstant, ImageConstant} from '../../assets/Constant';
 
 interface ITodoItem {
@@ -8,14 +15,19 @@ interface ITodoItem {
   done: boolean;
 }
 
-const TodoItem = ({id, text, done}: ITodoItem) => {
+const TodoItem = ({id, text, done, onToggle}: ITodoItem) => {
   return (
-    <View style={styles.item}>
-      <View style={[styles.circle, done && styles.filled]}>
-        {done && <Image source={IconConstant.CEHCK_WHITE} />}
+    <TouchableOpacity
+      onPress={() => {
+        onToggle(id);
+      }}>
+      <View style={styles.item}>
+        <View style={[styles.circle, done && styles.filled]}>
+          {done && <Image source={IconConstant.CEHCK_WHITE} />}
+        </View>
+        <Text style={[styles.text, done && styles.lineThrough]}>{text}</Text>
       </View>
-      <Text style={[styles.text, done && styles.lineThrough]}>{text}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
