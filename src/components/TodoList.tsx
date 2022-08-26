@@ -17,9 +17,11 @@ import TodoItem from './TodoItem';
 
 interface todoProp {
   todos: todoType[];
+  onToggle: (id: number) => {};
+  onRemove: (id: number) => {};
 }
 
-const TodoList = ({todos, onToggle}: todoProp) => {
+const TodoList = ({todos, onToggle, onRemove}: todoProp) => {
   return (
     <FlatList
       style={styles.list}
@@ -30,6 +32,7 @@ const TodoList = ({todos, onToggle}: todoProp) => {
           text={item.text}
           done={item.done}
           onToggle={onToggle}
+          onRemove={onRemove}
         />
       )}
       keyExtractor={item => {

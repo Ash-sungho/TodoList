@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -8,14 +9,30 @@ import {
   View,
 } from 'react-native';
 import {IconConstant, ImageConstant} from '../../assets/Constant';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface ITodoItem {
   id: number;
   text: string;
   done: boolean;
+  onToggle: (id: number) => {};
+  onRemove: (id: number) => {};
 }
 
-const TodoItem = ({id, text, done, onToggle}: ITodoItem) => {
+const TodoItem = ({id, text, done, onToggle, onRemove}: ITodoItem) => {
+  const remove = () => {
+    Alert.alert('삭제', '정말로 삭제하시겠어요?', [
+      {text: '취소', onPress: () => {}, style: 'cancel'},
+      {
+        text: '삭제',
+        onPress: () => {
+          onRemove(id);
+        },
+        style: 'destructive',
+      },
+    ]);
+  };
+
   return (
     <TouchableOpacity
       onPress={() => {
@@ -26,6 +43,16 @@ const TodoItem = ({id, text, done, onToggle}: ITodoItem) => {
           {done && <Image source={IconConstant.CEHCK_WHITE} />}
         </View>
         <Text style={[styles.text, done && styles.lineThrough]}>{text}</Text>
+        {done ? (
+          <TouchableOpacity
+            onPress={() => {
+              remove();
+            }}>
+            <Icon name="delete" size={32} color={'red'} />
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.removePlaceHolder} />
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -60,5 +87,9 @@ const styles = StyleSheet.create({
   lineThrough: {
     color: '#9e9e9e',
     textDecorationLine: 'line-through',
+  },
+  removePlaceHolder: {
+    width: 32,
+    height: 32,
   },
 });

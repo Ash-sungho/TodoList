@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
+import {Alert, KeyboardAvoidingView, Platform, StyleSheet} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import AddTodo from './src/components/AddTodo';
 import Datehead from './src/components/Datehead';
@@ -33,10 +33,15 @@ const App = () => {
     setTodos(todos.concat(todo));
   };
 
-  const onToggle = id => {
+  const onToggle = (id: number) => {
     const nextTodos = todos.map(todo => {
       return todo.id === id ? {...todo, done: !todo.done} : todo;
     });
+    setTodos(nextTodos);
+  };
+
+  const onRemove = (id: number) => {
+    const nextTodos = todos.filter(todo => todo.id !== id);
     setTodos(nextTodos);
   };
 
@@ -50,7 +55,7 @@ const App = () => {
           {todos.length === 0 ? (
             <Empty />
           ) : (
-            <TodoList todos={todos} onToggle={onToggle} />
+            <TodoList todos={todos} onToggle={onToggle} onRemove={onRemove} />
           )}
           <AddTodo onInsert={onInsert} />
         </KeyboardAvoidingView>
