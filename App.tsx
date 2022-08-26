@@ -1,11 +1,17 @@
 import * as React from 'react';
-import {KeyboardAvoidingView, Platform, StyleSheet, View} from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import AddTodo from './src/components/AddTodo';
 import Datehead from './src/components/Datehead';
 import Empty from './src/components/Empty';
 import TodoList from './src/components/TodoList';
-import {storages} from './src/components/util/storages';
+import {Key, storages} from './src/util/storages';
 
 export type todoType = {
   id: number;
@@ -15,53 +21,80 @@ export type todoType = {
 
 const App = () => {
   const [todos, setTodos] = React.useState<todoType[]>([
-    {id: 1, text: '작업환경 설정', done: true},
-    {id: 2, text: 'react-native 기초 공부', done: false},
-    {id: 3, text: 'TodoList 만들어보기', done: false},
+    // {id: 1, text: '작업환경 설정', done: true},
+    // {id: 2, text: 'react-native 기초 공부', done: false},
+    // {id: 3, text: 'TodoList 만들어보기', done: false},
   ]);
+  //불러오기
+  React.useEffect(() => {
+    console.log('useEffet 불러오기', todos);
+
+    storageLoadItem();
+  }, []);
+  //저장
+  React.useEffect(() => {
+    console.log('useEffet 저장', todos);
+    storageSaveItem();
+  }, [todos]);
+
+  const storageSaveItem = React.useCallback(() => {
+    try {
+      storages.setItem(Key.TODOLIST);
+    } catch (error) {
+      console.log('todos 저장 실패');
+      console.log(error);
+    }
+  }, []);
+
+  const storageLoadItem = React.useCallback(async () => {
+    try {
+      const result = await storages.getItem(Key.TODOLIST);
+      if (result) {
+        setTodos(result);
+      }
+    } catch (error) {
+      console.log('todos 로드 실패');
+      console.log(error);
+    }
+  }, []);
 
   const today = new Date();
 
-  const onInsert = (text: string): void => {
-    console.log('...todos', ...todos);
-    const nextId =
-      todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) + 1 : 1;
-    const todo = {
-      id: nextId,
-      text: text,
-      done: false,
-    };
-    setTodos(todos.concat(todo));
-  };
+  const onInsert = React.useCallback(
+    (text: string): void => {
+      if (text.length) {
+        const nextId =
+          todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) + 1 : 1;
+        const todo = {
+          id: nextId,
+          text: text,
+          done: false,
+        };
+        setTodos(todos.concat(todo));
+      } else {
+        Alert.alert('확인', '할일을 입력해주세요!');
+      }
+    },
+    [todos],
+  );
 
-  const onToggle = (id: number) => {
-    const nextTodos = todos.map(todo => {
-      return todo.id === id ? {...todo, done: !todo.done} : todo;
-    });
-    setTodos(nextTodos);
-  };
+  const onToggle = React.useCallback(
+    (id: number) => {
+      const nextTodos = todos.map(todo => {
+        return todo.id === id ? {...todo, done: !todo.done} : todo;
+      });
+      setTodos(nextTodos);
+    },
+    [todos],
+  );
 
-  const onRemove = (id: number) => {
-    const nextTodos = todos.filter(todo => todo.id !== id);
-    setTodos(nextTodos);
-  };
-
-  // const test1 = async () => {
-  //   await storages.setItem('test', '11값넣은거 테스트', () => {
-  //     console.log('스토리지테스트 setItem 완료');
-  //   });
-  // };
-
-  // const test2 = async () => {
-  //   // const a = await storages.getItem('test', () => {
-  //   //
-  //   // });
-  //   // console.log('확인 :', a);
-  //   await storages.getItem('test').then(result => {
-  //     console.log('getItem ::', result);
-  //     console.log('스토리지테스트 getItem 완료');
-  //   });
-  // };
+  const onRemove = React.useCallback(
+    (id: number) => {
+      const nextTodos = todos.filter(todo => todo.id !== id);
+      setTodos(nextTodos);
+    },
+    [todos],
+  );
 
   return (
     <SafeAreaProvider>
@@ -75,18 +108,6 @@ const App = () => {
           ) : (
             <TodoList todos={todos} onToggle={onToggle} onRemove={onRemove} />
           )}
-          {/* <Button
-          title="asyncStoragetest1"
-          onPress={() => {
-            test1();
-          }}
-        />
-        <Button
-          title="asyncStoragetest2"
-          onPress={() => {
-            test2();
-          }}
-        /> */}
           <AddTodo onInsert={onInsert} />
         </KeyboardAvoidingView>
       </SafeAreaView>

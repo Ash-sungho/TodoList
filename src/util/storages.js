@@ -1,9 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+export const Key = {
+  TODOLIST: 'todoList',
+};
+
 export const storages = {
-  // setItem: (key: string, value: string, callback?: Callback) => Promise<void>;
   setItem: async (key, value, callback) => {
-    console.log('key, value, callback', key, value, callback && callback);
     let newValue = value;
     switch (typeof value) {
       case 'array':
@@ -20,20 +22,13 @@ export const storages = {
   },
 
   getItem: async (key, callback) => {
-    let newValue;
+    let rawValue;
     try {
-      newValue = await AsyncStorage.getItem(key, callback && callback);
+      rawValue = await AsyncStorage.getItem(key, callback && callback);
     } catch (error) {
       console.log(error.message);
     }
-    switch (typeof value) {
-      case 'array':
-      case 'object':
-        return (newValue = JSON.stringify(value));
-
-      default:
-        return newValue;
-    }
+    return JSON.parse(rawValue);
   },
 
   clearAll: async () => {

@@ -4,11 +4,10 @@ import {
   Image,
   StyleSheet,
   Text,
-  Touchable,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {IconConstant, ImageConstant} from '../../assets/Constant';
+import {IconConstant} from '../../assets/Constant';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface ITodoItem {
