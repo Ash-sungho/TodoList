@@ -24,7 +24,9 @@ export const storages = {
   getItem: async (key, callback) => {
     let rawValue;
     try {
-      rawValue = await AsyncStorage.getItem(key, callback && callback);
+      rawValue = await AsyncStorage.getItem(key, callback);
+      if (rawValue) {
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -36,6 +38,26 @@ export const storages = {
       await AsyncStorage.clear();
     } catch (error) {
       error.message;
+    }
+  },
+  get: async key => {
+    try {
+      const rawTodos = await AsyncStorage.getItem(key);
+      if (!rawTodos) {
+        throw new Error('No saved Todos');
+      }
+      const savedTodos = JSON.parse(rawTodos);
+      return savedTodos;
+    } catch (e) {
+      throw new Error('Failed to load todos');
+    }
+  },
+
+  set: async (key, data) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(data));
+    } catch (e) {
+      throw new Error('Failed to save todos');
     }
   },
 };

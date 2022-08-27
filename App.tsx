@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   Alert,
+  InteractionManager,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
@@ -25,28 +26,36 @@ const App = () => {
     // {id: 2, text: 'react-native 기초 공부', done: false},
     // {id: 3, text: 'TodoList 만들어보기', done: false},
   ]);
+  // //불러오기
+  // React.useEffect(() => {
+  //   console.log('useEffet 불러오기', todos);
+  //   storageLoadItem();
+  // }, []);
+  // //저장
+  // React.useEffect(() => {
+  //   console.log('useEffet 저장2', todos);
+  //   storageSaveItem();
+  // }, [todos]);
   //불러오기
   React.useEffect(() => {
-    console.log('useEffet 불러오기', todos);
-
+    // storages.get(Key.TODOLIST).then(setTodos).catch(console.log);
     storageLoadItem();
   }, []);
   //저장
   React.useEffect(() => {
-    console.log('useEffet 저장', todos);
+    // storages.set(Key.TODOLIST, todos).catch(console.log);
     storageSaveItem();
   }, [todos]);
 
-  const storageSaveItem = React.useCallback(() => {
+  const storageSaveItem = async () => {
     try {
-      storages.setItem(Key.TODOLIST);
+      await storages.setItem(Key.TODOLIST, todos);
     } catch (error) {
       console.log('todos 저장 실패');
       console.log(error);
     }
-  }, []);
-
-  const storageLoadItem = React.useCallback(async () => {
+  };
+  const storageLoadItem = async () => {
     try {
       const result = await storages.getItem(Key.TODOLIST);
       if (result) {
@@ -56,7 +65,7 @@ const App = () => {
       console.log('todos 로드 실패');
       console.log(error);
     }
-  }, []);
+  };
 
   const today = new Date();
 
